@@ -7,7 +7,21 @@ const PORT = process.env.PORT || 3000;
 
 let logs = '';
 const db = {
-    sockets: {}
+    sockets: {},
+    pets: [
+        {
+            user: 'nick',
+            position: [-118.2873057, 34.0223563]
+        },
+        {
+            user: 'thomas',
+            position: [-118.2855462, 34.0214493]
+        },
+        {
+            user: 'karen',
+            position: [-118.2887112, 34.0215738]
+        }
+    ]
 };
 
 const log = (...msg) => {
@@ -25,6 +39,7 @@ const log = (...msg) => {
 };
 
 const app = express();
+app.use(express.json());
 const server = http.Server(app);
 const wss = new WebSocket.Server({ server });
 server.listen(PORT, () => {
@@ -44,11 +59,12 @@ app.get('/map', (req, res) => {
 });
 
 app.get('/nearbypets', (req, res) => {
-    res.send([
-        [-118.2873057, 34.0223563], 
-        [-118.2855462, 34.0214493], 
-        [-118.2887112, 34.0215738]
-    ]);
+    res.send(db.pets);
+});
+
+app.post('/mapclickpet', (req, res) => {
+    // Send data thru websocket here.
+    res.send(true);
 });
 
 wss.on('connection', (ws) => {
