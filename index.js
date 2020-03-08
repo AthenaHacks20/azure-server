@@ -2,27 +2,20 @@ const http = require('http');
 const express = require('express');
 const WebSocket = require('ws');
 const path = require('path');
+const CosmosClient = require('@azure/cosmos').CosmosClient;
+require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
 
 let logs = '';
-const db = {
+const localdb = {
     sockets: {},
-    pets: [
-        {
-            user: 'nick',
-            position: [-118.2873057, 34.0223563]
-        },
-        {
-            user: 'thomas',
-            position: [-118.2855462, 34.0214493]
-        },
-        {
-            user: 'karen',
-            position: [-118.2887112, 34.0215738]
-        }
-    ]
 };
+
+const cosmosdb = new CosmosClient({
+    endpoint: process.env.DB_ENDPOINT,
+    key: process.env.DB_KEY
+});
 
 const log = (...msg) => {
     let newLog = '<p>';
@@ -58,8 +51,11 @@ app.get('/map', (req, res) => {
     res.sendFile(path.join(__dirname, 'map.html'));
 });
 
-app.get('/nearbypets', (req, res) => {
-    res.send(db.pets);
+app.get('/nearbypets', async (req, res) => {
+    const { resources }  = await cosmosdb.database('mydb').container('pets').items.query({
+        query: 'SELECT * FROM c'
+    }).fetchAll();
+    res.send(resources);
 });
 
 app.post('/mapclickpet', (req, res) => {
@@ -70,7 +66,7 @@ app.post('/mapclickpet', (req, res) => {
 
 wss.on('connection', (ws) => {
     const id = Math.random().toString(36).substr(2, 9);
-    db.sockets[id] = ws;
+    localdb.sockets[id] = ws;
     log(`${id}: Connected!`);
 
     ws.on('message', (data) => {
@@ -83,7 +79,7 @@ wss.on('connection', (ws) => {
     });
 
     ws.on('close', () => {
-        delete db.sockets[id];
+        delete localdb.sockets[id];
         log(`${id}: Disconnected!`);
     });
 });
