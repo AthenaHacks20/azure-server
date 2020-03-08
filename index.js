@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 let logs = '';
 const localdb = {
     sockets: {},
+    map: {}
 };
 
 const cosmosdb = new CosmosClient({
@@ -59,8 +60,12 @@ app.get('/nearbypets', async (req, res) => {
 });
 
 app.post('/mapclickpet', (req, res) => {
-    // Send data thru websocket here.
-    log(`Got data from map:`, req.body)
+    const data = req.body;
+    log(`Got data from map:`, data)
+    localdb.maps[data.user].send(JSON.stringify({
+        event: 'clickingotherpet',
+        otherUser: data.clickedUser
+    }))
     res.send(true);
 });
 
@@ -73,6 +78,10 @@ wss.on('connection', (ws) => {
         try {
             data = JSON.parse(data.toString());
             log(`${id}:`, data);
+
+            if (data.event === 'connectmap') {
+                localdb.map[data.user] = ws;
+            }
         } catch {
             log(`${id}: Data parse error!`)
         }
