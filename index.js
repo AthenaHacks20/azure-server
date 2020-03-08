@@ -64,6 +64,7 @@ app.get('/nearbypets', (req, res) => {
 
 app.post('/mapclickpet', (req, res) => {
     // Send data thru websocket here.
+    log(`Got data from map:`, req.body)
     res.send(true);
 });
 
