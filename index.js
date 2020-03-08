@@ -62,7 +62,7 @@ app.get('/nearbypets', async (req, res) => {
 app.post('/mapclickpet', (req, res) => {
     const data = req.body;
     log(`Got data from map:`, data)
-    localdb.maps[data.user].send(JSON.stringify({
+    localdb.map[data.user].send(JSON.stringify({
         event: 'clickingotherpet',
         otherUser: data.clickedUser
     }))
@@ -81,7 +81,6 @@ wss.on('connection', (ws) => {
 
             if (data.event === 'connectmap') {
                 localdb.map[data.user] = ws;
-                ws.send('ping');
             }
         } catch {
             log(`${id}: Data parse error!`)
