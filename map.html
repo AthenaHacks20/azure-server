@@ -37,7 +37,20 @@
 
             // Wait until the map resources are ready.
             map.events.add('ready', function () {
-                
+                fetch('/nearbypets')
+                .then(res => res.json())
+                .then(res => {
+                    for (position of res) {
+                        var marker = new atlas.HtmlMarker({
+                            color: 'DodgerBlue',
+                            text: 'x',
+                            position
+                        });
+        
+                        map.markers.add(marker);
+                    }
+                });
+
             });
         }
     </script>

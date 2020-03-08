@@ -41,7 +41,15 @@ app.get('/db', (req, res) => {
 
 app.get('/map', (req, res) => {
     res.sendFile(path.join(__dirname, 'map.html'));
-})
+});
+
+app.get('/nearbypets', (req, res) => {
+    res.send([
+        [-118.2873057, 34.0223563], 
+        [-118.2855462, 34.0214493], 
+        [-118.2887112, 34.0215738]
+    ]);
+});
 
 wss.on('connection', (ws) => {
     const id = Math.random().toString(36).substr(2, 9);
