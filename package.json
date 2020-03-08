@@ -1,0 +1,23 @@
+{
+  "name": "azure-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AthenaHacks20/azure-server.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AthenaHacks20/azure-server/issues"
+  },
+  "homepage": "https://github.com/AthenaHacks20/azure-server#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
