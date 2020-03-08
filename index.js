@@ -33,6 +33,7 @@ const log = (...msg) => {
 };
 
 const app = express();
+app.use(express.static('public'));
 app.use(express.json());
 const server = http.Server(app);
 const wss = new WebSocket.Server({ server });

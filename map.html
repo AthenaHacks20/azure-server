@@ -20,6 +20,14 @@
 
     <script>
         var map, datasource, client, popup, searchInput, resultsPanel, searchInputLength, centerMapOnResults;
+        const imgMap = {
+            bird: 'BIRD_PIC.png',
+            crocodile: 'CROC_PIC.png',
+            giraffe: 'GIRAFFEE_PIC.png',
+            hippo: 'HIPPO_PIC.png',
+            lion: 'LION_PIC.png',
+            turtle: 'TURTLE_PIC.png'
+        }
 
         function GetMap() {
             // Initialize a map instance.
@@ -44,10 +52,16 @@
                 .then(res => res.json())
                 .then(res => {
                     for (let pet of res) {
+                        const img = '/' + imgMap[pet.pet];
+
                         const marker = new atlas.HtmlMarker({
                             color: 'DodgerBlue',
-                            text: pet.user,
-                            position: pet.position
+                            position: pet.position,
+                            htmlContent: `
+                                <div class="marker">
+                                    <img src="${img}">
+                                </div>
+                            `
                         });
         
                         map.markers.add(marker);
@@ -83,6 +97,11 @@
             position: relative;
             width: 100%;
             height: 100%;
+        }
+
+        .marker img {
+            height: 64px;
+            width: 64px;
         }
     </style>
 </head>
