@@ -1,6 +1,7 @@
 const http = require('http');
 const express = require('express');
 const WebSocket = require('ws');
+const path = require('path');
 
 const PORT = process.env.PORT || 3000;
 
@@ -37,6 +38,10 @@ app.get('/', (req, res) => {
 app.get('/db', (req, res) => {
     res.send(db);
 });
+
+app.get('/map', (req, res) => {
+    res.sendFile(path.join(__dirname, 'map.html'));
+})
 
 wss.on('connection', (ws) => {
     const id = Math.random().toString(36).substr(2, 9);
