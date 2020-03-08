@@ -81,6 +81,7 @@ wss.on('connection', (ws) => {
 
             if (data.event === 'connectmap') {
                 localdb.map[data.user] = ws;
+                ws.send('ping');
             }
         } catch {
             log(`${id}: Data parse error!`)
